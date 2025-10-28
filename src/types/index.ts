@@ -13,6 +13,7 @@ export interface PostWithCategories {
   excerpt: string | null;
   published: boolean;
   authorId: string | null;
+  authorName: string | null;
   createdAt: Date;
   updatedAt: Date;
   categories: Category[];

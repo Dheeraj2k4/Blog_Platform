@@ -3,6 +3,7 @@ import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 import { posts, postCategories, insertPostSchema } from "@/server/db/schema";
 import { eq, desc, and, or, ilike } from "drizzle-orm";
 import { slugify } from "@/lib/slugify";
+import { TRPCError } from "@trpc/server";
 
 export const postRouter = createTRPCRouter({
   // Get all posts with optional category filter
@@ -28,6 +29,7 @@ export const postRouter = createTRPCRouter({
           excerpt: posts.excerpt,
           published: posts.published,
           authorId: posts.authorId,
+          authorName: posts.authorName,
           imageUrl: posts.imageUrl,
           createdAt: posts.createdAt,
           updatedAt: posts.updatedAt,
@@ -145,6 +147,8 @@ export const postRouter = createTRPCRouter({
           content: posts.content,
           excerpt: posts.excerpt,
           published: posts.published,
+          authorId: posts.authorId,
+          authorName: posts.authorName,
           imageUrl: posts.imageUrl,
           createdAt: posts.createdAt,
           updatedAt: posts.updatedAt,
@@ -175,7 +179,10 @@ export const postRouter = createTRPCRouter({
         .where(eq(posts.slug, input.slug));
 
       if (!post) {
-        throw new Error("Post not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Post not found",
+        });
       }
 
       // Get categories for this post
@@ -215,7 +222,10 @@ export const postRouter = createTRPCRouter({
         .where(eq(posts.id, input.id));
 
       if (!post) {
-        throw new Error("Post not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Post not found",
+        });
       }
 
       // Get categories for this post
@@ -245,12 +255,16 @@ export const postRouter = createTRPCRouter({
       // Generate slug from title if not provided
       const slug = postData.slug || slugify(postData.title);
 
+      // Get author name from user email or metadata
+      const authorName = ctx.user.email || "Anonymous";
+
       const [newPost] = await ctx.db
         .insert(posts)
         .values({
           ...postData,
           slug,
-          authorId: ctx.user.id, // Add author ID from authenticated user
+          authorId: ctx.user.id,
+          authorName,
         })
         .returning();
 
@@ -280,18 +294,24 @@ export const postRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { categoryIds, ...postData } = input.data;
 
-      // Verify post belongs to user
+      // Verify post exists and belongs to user
       const [existingPost] = await ctx.db
         .select()
         .from(posts)
         .where(eq(posts.id, input.id));
 
       if (!existingPost) {
-        throw new Error("Post not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Post not found",
+        });
       }
 
       if (existingPost.authorId !== ctx.user.id) {
-        throw new Error("Unauthorized: You can only edit your own posts");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not allowed to modify this post",
+        });
       }
 
       // Update slug if title changed
@@ -333,18 +353,24 @@ export const postRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
-      // Verify post belongs to user
+      // Verify post exists and belongs to user
       const [existingPost] = await ctx.db
         .select()
         .from(posts)
         .where(eq(posts.id, input.id));
 
       if (!existingPost) {
-        throw new Error("Post not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Post not found",
+        });
       }
 
       if (existingPost.authorId !== ctx.user.id) {
-        throw new Error("Unauthorized: You can only delete your own posts");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not allowed to delete this post",
+        });
       }
 
       await ctx.db.delete(posts).where(eq(posts.id, input.id));
@@ -361,11 +387,17 @@ export const postRouter = createTRPCRouter({
         .where(eq(posts.id, input.id));
 
       if (!post) {
-        throw new Error("Post not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Post not found",
+        });
       }
 
       if (post.authorId !== ctx.user.id) {
-        throw new Error("Unauthorized: You can only modify your own posts");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not allowed to modify this post",
+        });
       }
 
       const [updatedPost] = await ctx.db

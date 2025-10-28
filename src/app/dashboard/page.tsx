@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MarkdownEditor } from "@/components/posts/MarkdownEditor";
 import { ImageUpload } from "@/components/ui/image-upload";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { formatDate } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import type { PostWithCategories, Category } from "@/types";
@@ -20,15 +20,19 @@ import {
   FileText,
   Calendar,
   CheckCircle2,
-  Clock
+  Clock,
+  User as UserIcon,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { createClient } from "@/lib/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
 export default function DashboardPage() {
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -36,6 +40,17 @@ export default function DashboardPage() {
     imageUrl: "",
     published: false,
   });
+
+  const supabase = createClient();
+
+  // Get current user on mount
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setCurrentUser(user);
+    };
+    getUser();
+  }, [supabase]);
 
   const utils = trpc.useUtils();
   const { data, isLoading } = trpc.post.getAll.useQuery({ page, limit: 10 });
@@ -346,7 +361,10 @@ export default function DashboardPage() {
 
           {posts && posts.length > 0 ? (
             <div className="grid gap-4">
-              {posts.map((post: PostWithCategories, index: number) => (
+              {posts.map((post: PostWithCategories, index: number) => {
+                const isOwnPost = currentUser && post.authorId === currentUser.id;
+                
+                return (
                 <motion.div
                   key={post.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -361,25 +379,34 @@ export default function DashboardPage() {
                         <h3 className="text-xl font-bold text-foreground line-clamp-2">
                           {post.title}
                         </h3>
-                        <span
-                          className={`badge flex-shrink-0 ${
+                        <div className="flex gap-2 flex-shrink-0">
+                          {isOwnPost && (
+                            <span className="px-2 py-1 rounded-md text-xs font-medium flex items-center gap-1"
+                              style={{ backgroundColor: '#071f36', color: 'white' }}>
+                              <UserIcon className="h-3 w-3" />
+                              Your Post
+                            </span>
+                          )}
+                          <span
+                            className={`badge flex-shrink-0 ${
                             post.published
                               ? "bg-green-100 text-green-800 border-green-200"
                               : "bg-yellow-100 text-yellow-800 border-yellow-200"
                           }`}
-                        >
-                          {post.published ? (
-                            <>
-                              <Eye className="h-3 w-3 mr-1" />
-                              Published
-                            </>
-                          ) : (
-                            <>
-                              <Clock className="h-3 w-3 mr-1" />
-                              Draft
-                            </>
-                          )}
-                        </span>
+                          >
+                            {post.published ? (
+                              <>
+                                <Eye className="h-3 w-3 mr-1" />
+                                Published
+                              </>
+                            ) : (
+                              <>
+                                <Clock className="h-3 w-3 mr-1" />
+                                Draft
+                              </>
+                            )}
+                          </span>
+                        </div>
                       </div>
                       
                       {post.excerpt && (
@@ -397,75 +424,83 @@ export default function DashboardPage() {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex flex-wrap gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleEdit(post)}
-                        className="text-white transition-all duration-200 hover:bg-white border-2"
-                        style={{ 
-                          backgroundColor: '#071f36', 
-                          borderColor: '#071f36',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = 'white';
-                          e.currentTarget.style.color = '#071f36';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = '#071f36';
-                          e.currentTarget.style.color = 'white';
-                        }}
-                      >
-                        <Edit2 className="h-3 w-3 mr-1" />
-                        Edit
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => togglePublishMutation.mutate({ id: post.id })}
-                        disabled={togglePublishMutation.isPending}
-                        className="text-white transition-all duration-200 hover:bg-white border-2"
-                        style={{ 
-                          backgroundColor: '#071f36', 
-                          borderColor: '#071f36',
-                        }}
-                        onMouseEnter={(e) => {
-                          if (!togglePublishMutation.isPending) {
+                    {isOwnPost && (
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleEdit(post)}
+                          className="text-white transition-all duration-200 hover:bg-white border-2"
+                          style={{ 
+                            backgroundColor: '#071f36', 
+                            borderColor: '#071f36',
+                          }}
+                          onMouseEnter={(e) => {
                             e.currentTarget.style.backgroundColor = 'white';
                             e.currentTarget.style.color = '#071f36';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = '#071f36';
-                          e.currentTarget.style.color = 'white';
-                        }}
-                      >
-                        {post.published ? (
-                          <>
-                            <EyeOff className="h-3 w-3 mr-1" />
-                            Unpublish
-                          </>
-                        ) : (
-                          <>
-                            <Eye className="h-3 w-3 mr-1" />
-                            Publish
-                          </>
-                        )}
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleDelete(post.id, post.title)}
-                        disabled={deleteMutation.isPending}
-                        className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
-                      >
-                        <Trash2 className="h-3 w-3 mr-1" />
-                        Delete
-                      </Button>
-                    </div>
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#071f36';
+                            e.currentTarget.style.color = 'white';
+                          }}
+                        >
+                          <Edit2 className="h-3 w-3 mr-1" />
+                          Edit
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => togglePublishMutation.mutate({ id: post.id })}
+                          disabled={togglePublishMutation.isPending}
+                          className="text-white transition-all duration-200 hover:bg-white border-2"
+                          style={{ 
+                            backgroundColor: '#071f36', 
+                            borderColor: '#071f36',
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!togglePublishMutation.isPending) {
+                              e.currentTarget.style.backgroundColor = 'white';
+                              e.currentTarget.style.color = '#071f36';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#071f36';
+                            e.currentTarget.style.color = 'white';
+                          }}
+                        >
+                          {post.published ? (
+                            <>
+                              <EyeOff className="h-3 w-3 mr-1" />
+                              Unpublish
+                            </>
+                          ) : (
+                            <>
+                              <Eye className="h-3 w-3 mr-1" />
+                              Publish
+                            </>
+                          )}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleDelete(post.id, post.title)}
+                          disabled={deleteMutation.isPending}
+                          className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+                        >
+                          <Trash2 className="h-3 w-3 mr-1" />
+                          Delete
+                        </Button>
+                      </div>
+                    )}
+                    {!isOwnPost && (
+                      <div className="text-sm text-muted-foreground">
+                        By {post.authorName || post.author?.email || "Unknown"}
+                      </div>
+                    )}
                   </div>
                 </motion.div>
-              ))}
+              );
+              })}
             </div>
           ) : (
             <div className="card p-12 text-center">

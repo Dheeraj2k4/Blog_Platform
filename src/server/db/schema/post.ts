@@ -12,6 +12,7 @@ export const posts = pgTable("posts", {
   imageUrl: text("image_url"), // Optional featured image
   published: boolean("published").default(false).notNull(),
   authorId: uuid("author_id").references(() => users.id, { onDelete: "cascade" }),
+  authorName: text("author_name"), // Display name or email of the author
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
