@@ -28,6 +28,7 @@ export const postRouter = createTRPCRouter({
           excerpt: posts.excerpt,
           published: posts.published,
           authorId: posts.authorId,
+          imageUrl: posts.imageUrl,
           createdAt: posts.createdAt,
           updatedAt: posts.updatedAt,
         })
@@ -144,6 +145,7 @@ export const postRouter = createTRPCRouter({
           content: posts.content,
           excerpt: posts.excerpt,
           published: posts.published,
+          imageUrl: posts.imageUrl,
           createdAt: posts.createdAt,
           updatedAt: posts.updatedAt,
         })

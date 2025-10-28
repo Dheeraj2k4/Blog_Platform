@@ -52,14 +52,13 @@ A modern, full-stack blogging platform built with **Next.js 15**, **tRPC**, **Dr
 - ✅ Markdown rendering with syntax highlighting
 - ✅ Error handling and loading states
 
-### Enhanced Features (Priority 3 - 89% Complete)
+### Enhanced Features (Priority 3 - 100% Complete)
 - ✅ **Search functionality** - Search posts by title and content
 - ✅ **Pagination** - Navigate through posts with page controls
 - ✅ **Post statistics** - Word count and reading time estimation
 - ✅ **SEO optimization** - OpenGraph tags, Twitter Cards, meta descriptions
 - ✅ **Complete landing page** - 5-section professional homepage
-- ✅ **Image upload** - Optional image URLs for posts and categories
-- ⏳ Advanced image upload with file hosting (optional - not yet implemented)
+- ✅ **Image upload** - Drag-and-drop file upload with Supabase Storage for posts and categories
 
 ### Technical Features
 - ✅ End-to-end type safety with tRPC
@@ -221,7 +220,22 @@ Run the authentication migration in your database:
 
 📖 **See [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) for complete authentication setup guide**
 
-### 5. Start Development Server
+### 5. Set Up Supabase Storage (for Image Uploads)
+
+1. Go to your Supabase project dashboard
+2. Navigate to **Storage** in the left sidebar
+3. Click **"New bucket"**
+4. Create a bucket named: `blog-images`
+5. Set it to **Public** (so uploaded images are accessible)
+6. Click **Create bucket**
+
+**Bucket Policies (optional but recommended):**
+- Go to **Policies** tab
+- Add INSERT policy: Allow authenticated users to upload
+- Add SELECT policy: Allow public read access
+- Add DELETE policy: Allow authenticated users to delete their own images
+
+### 6. Start Development Server
 
 ```powershell
 npm run dev
@@ -229,12 +243,12 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 6. Create Your First Account
+### 7. Create Your First Account
 
 1. Click "Get Started" or "Sign Up"
 2. Choose authentication method (Email or OAuth)
 3. Complete registration
-4. Start creating posts!
+4. Start creating posts with images!
 
 The application will be available at **http://localhost:3000**
 

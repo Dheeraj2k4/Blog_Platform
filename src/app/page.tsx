@@ -36,7 +36,7 @@ export default function HomePage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight font-sans" style={{ color: '#071f36' }}>
-              Level Up Your Story Game,
+              Level Up Your Story Game
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto font-sans">
               Creative inspiration starts with just <span className="font-semibold" style={{ color: '#071f36' }}>Articler</span>.
@@ -52,7 +52,16 @@ export default function HomePage() {
               <Link href={`/posts/${featuredPost.slug}`}>
                 <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300 group">
                   <div className="w-full h-64 md:h-96 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
-                    <div className="absolute top-6 left-6">
+                    {(featuredPost as any).imageUrl ? (
+                      <img
+                        src={(featuredPost as any).imageUrl}
+                        alt={featuredPost.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5"></div>
+                    )}
+                    <div className="absolute top-6 left-6 z-10">
                       <span className="px-4 py-2 text-white text-sm font-medium rounded-full font-sans" style={{ backgroundColor: '#071f36' }}>
                         Featured
                       </span>
@@ -115,7 +124,17 @@ export default function HomePage() {
                 <div key={post.id}>
                   <Link href={`/posts/${post.slug}`}>
                     <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300 h-full group">
-                      <div className="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200"></div>
+                      <div className="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
+                        {(post as any).imageUrl ? (
+                          <img
+                            src={(post as any).imageUrl}
+                            alt={post.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5"></div>
+                        )}
+                      </div>
                       <div className="p-6">
                         <div className="flex items-center gap-3 mb-3 text-sm">
                           {post.categories && post.categories[0] ? (

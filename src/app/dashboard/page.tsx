@@ -4,6 +4,7 @@ import { trpc } from "@/app/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MarkdownEditor } from "@/components/posts/MarkdownEditor";
+import { ImageUpload } from "@/components/ui/image-upload";
 import { useState } from "react";
 import { formatDate } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -231,23 +232,15 @@ export default function DashboardPage() {
                     </p>
                   </div>
 
-                  {/* Image URL (Optional) */}
-                  <div>
-                    <label className="block text-sm font-semibold mb-2 text-foreground">
-                      Featured Image URL (Optional)
-                    </label>
-                    <Input
-                      value={formData.imageUrl}
-                      onChange={(e) =>
-                        setFormData({ ...formData, imageUrl: e.target.value })
-                      }
-                      placeholder="https://example.com/image.jpg"
-                      type="url"
-                    />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Add a featured image for your post (paste image URL)
-                    </p>
-                  </div>
+                  {/* Featured Image (Optional) */}
+                  <ImageUpload
+                    value={formData.imageUrl}
+                    onChange={(url) => setFormData({ ...formData, imageUrl: url })}
+                    onRemove={() => setFormData({ ...formData, imageUrl: "" })}
+                    folder="posts"
+                    label="Featured Image (Optional)"
+                    description="Upload a featured image for your post"
+                  />
 
                   {/* Categories */}
                   <div>

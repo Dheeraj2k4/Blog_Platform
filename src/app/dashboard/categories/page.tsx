@@ -4,6 +4,7 @@ import { trpc } from "@/app/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { ImageUpload } from "@/components/ui/image-upload";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
@@ -195,23 +196,15 @@ export default function CategoriesPage() {
                     </p>
                   </div>
 
-                  {/* Image URL (Optional) */}
-                  <div>
-                    <label className="block text-sm font-semibold mb-2 text-foreground">
-                      Category Image URL (Optional)
-                    </label>
-                    <Input
-                      value={formData.imageUrl}
-                      onChange={(e) =>
-                        setFormData({ ...formData, imageUrl: e.target.value })
-                      }
-                      placeholder="https://example.com/category-image.jpg"
-                      type="url"
-                    />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Add an image for this category (paste image URL)
-                    </p>
-                  </div>
+                  {/* Category Image (Optional) */}
+                  <ImageUpload
+                    value={formData.imageUrl}
+                    onChange={(url) => setFormData({ ...formData, imageUrl: url })}
+                    onRemove={() => setFormData({ ...formData, imageUrl: "" })}
+                    folder="categories"
+                    label="Category Image (Optional)"
+                    description="Upload an image for this category"
+                  />
 
                   <div className="flex gap-3 pt-4">
                     <Button 
@@ -259,11 +252,21 @@ export default function CategoriesPage() {
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     className="card overflow-hidden hover:shadow-card-hover transition-shadow group"
                   >
-                    {/* Colorful Header */}
-                    <div className={`${colorScheme.bg} h-32 flex items-center justify-center relative`}>
-                      <div className="absolute inset-0 bg-white/20"></div>
-                      <Folder className={`h-16 w-16 ${colorScheme.icon} relative z-10`} />
-                    </div>
+                    {/* Category Image or Colorful Header */}
+                    {(category as any).imageUrl ? (
+                      <div className="h-32 relative overflow-hidden">
+                        <img
+                          src={(category as any).imageUrl}
+                          alt={category.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    ) : (
+                      <div className={`${colorScheme.bg} h-32 flex items-center justify-center relative`}>
+                        <div className="absolute inset-0 bg-white/20"></div>
+                        <Folder className={`h-16 w-16 ${colorScheme.icon} relative z-10`} />
+                      </div>
+                    )}
 
                     {/* Content */}
                     <div className="p-6">

@@ -37,6 +37,17 @@ export default function PostPage() {
 
   return (
     <article className="container mx-auto px-4 py-8 max-w-4xl">
+      {/* Featured Image */}
+      {(post as any).imageUrl && (
+        <div className="mb-8 rounded-2xl overflow-hidden">
+          <img
+            src={(post as any).imageUrl}
+            alt={post.title}
+            className="w-full h-96 object-cover"
+          />
+        </div>
+      )}
+      
       <header className="mb-8">
         <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
         <div className="flex flex-wrap items-center gap-4 text-muted-foreground text-sm mb-4">

@@ -86,7 +86,7 @@ export default function PostsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex flex-wrap justify-center gap-2"
+              className="flex flex-wrap justify-center gap-3"
             >
               <button
                 onClick={() => setSelectedCategory(null)}
@@ -103,13 +103,25 @@ export default function PostsPage() {
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`badge transition-all ${
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
                     selectedCategory === category.id
-                      ? "badge-primary"
+                      ? "text-white shadow-lg"
                       : "bg-muted text-foreground hover:bg-muted/80"
                   }`}
+                  style={
+                    selectedCategory === category.id
+                      ? { backgroundColor: "#071f36" }
+                      : undefined
+                  }
                   disabled={searchQuery.length > 0}
                 >
+                  {(category as any).imageUrl && (
+                    <img
+                      src={(category as any).imageUrl}
+                      alt={category.name}
+                      className="w-5 h-5 rounded-full object-cover"
+                    />
+                  )}
                   {category.name}
                 </button>
               ))}
@@ -167,9 +179,17 @@ export default function PostsPage() {
                   >
                     <Link href={`/posts/${post.slug}`}>
                       <div className="card card-hover h-full overflow-hidden group">
-                        {/* Featured Image Placeholder */}
+                        {/* Featured Image */}
                         <div className="w-full h-48 bg-gradient-to-br from-slate-100 to-slate-200 relative overflow-hidden">
-                          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5"></div>
+                          {(post as any).imageUrl ? (
+                            <img
+                              src={(post as any).imageUrl}
+                              alt={post.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          ) : (
+                            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5"></div>
+                          )}
                         </div>
 
                         {/* Content */}
@@ -204,12 +224,11 @@ export default function PostsPage() {
                           {/* Author and Date */}
                           <div className="flex items-center justify-between pt-4 border-t border-border">
                             <div className="flex items-center gap-2">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-xs font-semibold">
-                                <User className="h-4 w-4" />
+                              <div className="flex flex-col">
+                                <span className="text-sm text-muted-foreground font-medium">
+                                  Author: {post.author?.email?.split('@')[0] || 'Anonymous'}
+                                </span>
                               </div>
-                              <span className="text-sm text-muted-foreground font-medium">
-                                {post.author?.email?.split('@')[0] || 'Anonymous'}
-                              </span>
                             </div>
                             <span className="text-xs text-muted-foreground">
                               {formatDate(post.createdAt)}
