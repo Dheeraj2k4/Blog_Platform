@@ -2,12 +2,6 @@
 
 A modern, full-stack blogging platform built with **Next.js 15**, **tRPC**, **Drizzle ORM**, **PostgreSQL**, and **TypeScript**. Features a complete CRUD system for posts and categories with markdown support, type-safe APIs, search functionality, and a clean, responsive UI.
 
----
-
-## � Documentation
-
-- **[Quick Start Guide](./QUICKSTART.md)** - Get up and running in 5 minutes
-- **[Features Documentation](./FEATURES.md)** - Complete feature list and implementation details
 
 ---
 
@@ -195,11 +189,6 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 3. **Auth**: Settings → API → Copy Project URL and anon key
 4. See [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) for detailed authentication setup
 
-**Neon (Database Only)**
-1. Go to [neon.tech](https://neon.tech) and create a project
-2. Copy the connection string
-3. Still need Supabase for authentication
-
 ### 4. Run Database Migrations
 
 **First time setup - Create tables:**
@@ -218,24 +207,7 @@ Run the authentication migration in your database:
 - If using Supabase: Copy contents of `migrations/add_auth_support.sql` to SQL Editor and execute
 - If using psql: `psql -h host -U user -d database -f migrations/add_auth_support.sql`
 
-📖 **See [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) for complete authentication setup guide**
-
-### 5. Set Up Supabase Storage (for Image Uploads)
-
-1. Go to your Supabase project dashboard
-2. Navigate to **Storage** in the left sidebar
-3. Click **"New bucket"**
-4. Create a bucket named: `blog-images`
-5. Set it to **Public** (so uploaded images are accessible)
-6. Click **Create bucket**
-
-**Bucket Policies (optional but recommended):**
-- Go to **Policies** tab
-- Add INSERT policy: Allow authenticated users to upload
-- Add SELECT policy: Allow public read access
-- Add DELETE policy: Allow authenticated users to delete their own images
-
-### 6. Start Development Server
+###  Start Development Server
 
 ```powershell
 npm run dev
@@ -391,9 +363,6 @@ Make sure to set `DATABASE_URL` and `NEXT_PUBLIC_APP_URL` in your production env
 
 This project is open source and available under the MIT License.
 
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome!
 
 ---
 
