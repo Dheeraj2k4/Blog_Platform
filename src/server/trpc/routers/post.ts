@@ -137,7 +137,7 @@ export const postRouter = createTRPCRouter({
 
       const searchPattern = `%${query}%`;
 
-      let searchQuery = ctx.db
+      const searchQuery = ctx.db
         .select({
           id: posts.id,
           title: posts.title,

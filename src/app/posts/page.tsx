@@ -4,7 +4,7 @@ import { trpc } from "@/app/client";
 import { useState } from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
-import { Search, Clock, User } from "lucide-react";
+import { Search, Clock } from "lucide-react";
 import { formatDate, getReadingTime } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -130,7 +130,7 @@ export default function PostsPage() {
 
           {searchQuery && (
             <p className="text-center text-sm text-muted-foreground mt-4">
-              Found {posts?.length || 0} result{posts?.length !== 1 ? "s" : ""} for "{searchQuery}"
+              Found {posts?.length || 0} result{posts?.length !== 1 ? 's' : ''} for &quot;{searchQuery}&quot;
             </p>
           )}
         </div>
