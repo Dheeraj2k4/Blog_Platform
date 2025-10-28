@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer components {
+  /* Card styles */
+  .card {
+    @apply bg-card border border-border rounded-lg shadow-card;
+  }
+
+  .card-hover {
+    @apply transition-shadow duration-300 hover:shadow-card-hover;
+  }
+
+  /* Badge styles */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+  }
+
+  .badge-primary {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  .badge-accent {
+    @apply bg-accent/10 text-accent;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-surface;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50;
+  }
+}
+
+@layer utilities {
+  /* Markdown prose styles */
+  .prose {
+    @apply max-w-none text-foreground;
+  }
+
+  .prose h1 {
+    @apply text-4xl font-bold mt-8 mb-6 text-foreground;
+  }
+
+  .prose h2 {
+    @apply text-3xl font-bold mt-8 mb-5 text-foreground;
+  }
+
+  .prose h3 {
+    @apply text-2xl font-semibold mt-6 mb-4 text-foreground;
+  }
+
+  .prose h4 {
+    @apply text-xl font-semibold mt-5 mb-3 text-foreground;
+  }
+
+  .prose p {
+    @apply my-4 leading-7 text-foreground/90;
+  }
+
+  .prose a {
+    @apply text-accent hover:text-accent-dark transition-colors underline decoration-accent/30 hover:decoration-accent;
+  }
+
+  .prose ul,
+  .prose ol {
+    @apply my-4 ml-6 space-y-2;
+  }
+
+  .prose li {
+    @apply my-1 text-foreground/90;
+  }
+
+  .prose code {
+    @apply bg-muted px-2 py-0.5 rounded text-sm text-accent font-mono;
+  }
+
+  .prose pre {
+    @apply bg-muted p-6 rounded-lg overflow-x-auto my-6 border border-border;
+  }
+
+  .prose pre code {
+    @apply bg-transparent px-0 py-0 text-foreground;
+  }
+
+  .prose blockquote {
+    @apply border-l-4 border-accent pl-6 italic my-6 text-foreground/80;
+  }
+
+  .prose img {
+    @apply rounded-lg my-6;
+  }
+
+  .prose hr {
+    @apply border-border my-8;
+  }
+
+  .prose table {
+    @apply w-full my-6 border-collapse;
+  }
+
+  .prose th {
+    @apply bg-muted p-3 text-left font-semibold border border-border;
+  }
+
+  .prose td {
+    @apply p-3 border border-border;
+  }
+
+  .prose strong {
+    @apply font-bold text-foreground;
+  }
+
+  .prose em {
+    @apply italic;
+  }
+}
