@@ -19,49 +19,49 @@ A modern, full-stack blogging platform built with **Next.js 15**, **tRPC**, **Dr
 
 ## ✨ Features
 
-### 🔐 Authentication & Security (NEW!)
-- ✅ **Supabase Authentication** - Email/password and OAuth support
-- ✅ **OAuth Providers** - Google and GitHub sign-in
-- ✅ **Protected Routes** - Middleware-based authentication
-- ✅ **User Sessions** - Persistent sessions across reloads
-- ✅ **User-Specific Content** - Posts tied to authors
-- ✅ **Authorization** - Users can only edit their own posts
-- ✅ **Server-Side Validation** - tRPC protected procedures
+### 🔐 Authentication & Security
+-  **Supabase Authentication** - Email/password and OAuth support
+-  **OAuth Providers** - Google and GitHub sign-in
+-  **Protected Routes** - Middleware-based authentication
+-  **User Sessions** - Persistent sessions across reloads
+-  **User-Specific Content** - Posts tied to authors
+-  **Authorization** - Users can only edit their own posts
+-  **Server-Side Validation** - tRPC protected procedures
 
 ### Core Functionality (Priority 1 - 100% Complete)
-- ✅ Complete CRUD operations for blog posts
-- ✅ Complete CRUD operations for categories
-- ✅ Many-to-many relationship between posts and categories
-- ✅ Markdown-based post editor with live preview
-- ✅ Auto-generated slugs from titles
-- ✅ Draft/Published status toggle
-- ✅ Professional landing page with hero, features, and CTA
-- ✅ Responsive design (mobile, tablet, desktop)
+-  Complete CRUD operations for blog posts
+-  Complete CRUD operations for categories
+-  Many-to-many relationship between posts and categories
+-  Markdown-based post editor with live preview
+-  Auto-generated slugs from titles
+-  Draft/Published status toggle
+-  Professional landing page with hero, features, and CTA
+-  Responsive design (mobile, tablet, desktop)
 
 ### Advanced Features (Priority 2 - 100% Complete)
-- ✅ Individual post pages with dynamic routes
-- ✅ Post listing page with filtering
-- ✅ Category badges and filtering
-- ✅ Professional UI with Header and Footer
-- ✅ Markdown rendering with syntax highlighting
-- ✅ Error handling and loading states
+-  Individual post pages with dynamic routes
+-  Post listing page with filtering
+-  Category badges and filtering
+-  Professional UI with Header and Footer
+-  Markdown rendering with syntax highlighting
+-  Error handling and loading states
 
 ### Enhanced Features (Priority 3 - 100% Complete)
-- ✅ **Search functionality** - Search posts by title and content
-- ✅ **Pagination** - Navigate through posts with page controls
-- ✅ **Post statistics** - Word count and reading time estimation
-- ✅ **SEO optimization** - OpenGraph tags, Twitter Cards, meta descriptions
-- ✅ **Complete landing page** - 5-section professional homepage
-- ✅ **Image upload** - Drag-and-drop file upload with Supabase Storage for posts and categories
+-  **Search functionality** - Search posts by title and content
+-  **Pagination** - Navigate through posts with page controls
+-  **Post statistics** - Word count and reading time estimation
+-  **SEO optimization** - OpenGraph tags, Twitter Cards, meta descriptions
+-  **Complete landing page** - 5-section professional homepage
+-  **Image upload** - Drag-and-drop file upload with Supabase Storage for posts and categories
 
 ### Technical Features
-- ✅ End-to-end type safety with tRPC
-- ✅ Zod schema validation on all inputs
-- ✅ Optimistic updates for better UX
-- ✅ PostgreSQL with Drizzle ORM migrations
-- ✅ Clean, modular architecture
-- ✅ Production-ready code structure
-- ✅ SEO-friendly metadata and OpenGraph tags
+-  End-to-end type safety with tRPC
+-  Zod schema validation on all inputs
+-  Optimistic updates for better UX
+-  PostgreSQL with Drizzle ORM migrations
+-  Clean, modular architecture
+-  Production-ready code structure
+-  SEO-friendly metadata and OpenGraph tags
 
 ## 📁 Project Structure
 
